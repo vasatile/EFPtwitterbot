@@ -1,5 +1,4 @@
 import os
-# from writefile import MySQLWriter
 import requests
 from FollowsAndTagsUrl import FollowAndTags
 from follows import Follows
@@ -28,18 +27,7 @@ with open('noteworthyens.json', 'r', encoding='utf-8') as file:
 # Access the ENS names list
 addressList = data['ens_names']
 
-# Initialize MySQLWriter and print success message on connection
-# try:
-#     db_writer = MySQLWriter(host=os.getenv('host'), user=os.getenv('user'), password=os.getenv('password'), database=os.getenv('database'))
-#     print("Connected to MySQL database successfully.")
-# except Exception as e:
-#     print(f"Failed to connect to MySQL: {e}")
-#     exit()
 
-# Read existing data
-# existing_data = db_writer.read_existing_followings()  # Updated to read followings
-# existing_blockedList = db_writer.read_existing_blockings()  # Updated to read blockings
-# existing_mutedlist = db_writer.read_existing_mutings()    # Updated to read mutings
 
 # Lists to hold new entries
 new_followings = []
@@ -108,14 +96,6 @@ def process_mutings(address):
         print(f"Error occurred while processing mutings for {address}: {e}")
 
 
-# Main loop
-# Main loop to process each address
-
-
-
-    # Optionally, add a brea
-    # k condition or sleep to avoid an infinite loop
-    # time.sleep(10)  # Example: wait 10 seconds before the next iteration
 
 
         # Process new followings
@@ -164,36 +144,3 @@ while True:
 
     # Sleep for 30 minutes
     time.sleep(30 * 60)
-
-# Example usage
-# process_new_entries(new_followings, new_blockings, new_mutings, bot)
-
-
-    # Write new data to MySQL with print statements for status
-    # if new_followings:
-    #     for new_entry in new_followings:
-    #         for address, addresses in new_entry.items():
-    #             for new_addr in addresses:
-    #                 # Write to followings table
-    #                 db_writer.write_data('followings', [[address, new_addr]])
-    #     print("New followings written to MySQL.")
-
-    # if new_blockings:
-    #     for new_entry in new_blockings:
-    #         for address, addresses in new_entry.items():
-    #             for new_addr in addresses:
-    #                 # Write to blocking table
-    #                 db_writer.write_data('blocking', [[address, new_addr]])
-    #     print("New blockings written to MySQL.")
-
-    # if new_muting:
-    #     for new_entry in new_muting:
-    #         for address, addresses in new_entry.items():
-    #             for new_addr in addresses:
-    #                 # Write to muting table
-    #                 db_writer.write_data('muting', [[address, new_addr]])
-    #     print("New mutings written to MySQL.")
-    # else:
-    #     print("no data to write")
-
-        
