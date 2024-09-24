@@ -22,4 +22,5 @@ class FetchEns:
 
         # ens extract
         name = ens_data["ens"]["name"]
+        print(name)
         return name
