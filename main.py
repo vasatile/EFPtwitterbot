@@ -19,7 +19,7 @@ ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET')
 # Create an instance of TwitterBot
 bot = TwitterBot(API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
-image_path = "img/efphero.jpg"
+
 # Load the ENS names from the JSON file with utf-8 encoding
 with open('noteworthyens.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
@@ -43,7 +43,7 @@ def process_followings(address):
     try:
         addresses = get_addy.extract_addresses()
         if addresses:
-            new_addresses = addresses[-1]  # Get the last element
+            new_addresses = addresses[0]  # Get the last element
             new_followings.append({address: new_addresses})
             print(f"New followings found for {address}: {new_addresses}")
         else:
@@ -64,7 +64,7 @@ def process_blockings(address):
         BlockedUsers = Blocks(AllTags)
         listofBlockusers = BlockedUsers.extract_block_users()
         if listofBlockusers:
-            new_blocked_addresses = listofBlockusers[-1]  # Get the last element
+            new_blocked_addresses = listofBlockusers[0]  # Get the last element
             new_blockings.append({address: new_blocked_addresses})
             print(f"New blockings found for {address}: {new_blocked_addresses}")
         else:
@@ -85,7 +85,7 @@ def process_mutings(address):
         MutedUsers = Mutes(AllTags)
         listofMutedusers = MutedUsers.extract_mute_users()
         if listofMutedusers:
-            new_muted_addresses = listofMutedusers[-1]  # Get the last element
+            new_muted_addresses = listofMutedusers[0]  # Get the last element
             new_muting.append({address: new_muted_addresses})
             print(f"New mutings found for {address}: {new_muted_addresses}")
         else:
@@ -99,7 +99,7 @@ def process_mutings(address):
 
 
         # Process new followings
-def process_new_entries(new_followings, new_blockings, new_mutings, bot, image_path):
+def process_new_entries(new_followings, new_blockings, new_mutings, bot):
     # Process new followings
     for new_entry in new_followings:
         for address, addresses in new_entry.items():
@@ -109,7 +109,7 @@ def process_new_entries(new_followings, new_blockings, new_mutings, bot, image_p
                 fetchens = FetchEns(get_ensurl)
                 name = fetchens.extract_ens()
                 # Now you can use 'address' here
-                bot.post_following_tweet(address, name, image_path)
+                bot.post_following_tweet(address, name)
 
     # Process new blockings
     for new_entry in new_blockings:
@@ -119,7 +119,7 @@ def process_new_entries(new_followings, new_blockings, new_mutings, bot, image_p
                 get_ensurl = ensurl.get_ens_data_url()
                 fetchens = FetchEns(get_ensurl)
                 name = fetchens.extract_ens()
-                bot.post_blocking_tweet(address, name, image_path)
+                bot.post_blocking_tweet(address, name)
 
     # Process new mutings
     for new_entry in new_mutings:
@@ -129,7 +129,7 @@ def process_new_entries(new_followings, new_blockings, new_mutings, bot, image_p
                 get_ensurl = ensurl.get_ens_data_url()
                 fetchens = FetchEns(get_ensurl)
                 name = fetchens.extract_ens()
-                bot.post_muting_tweet(address, name, image_path)
+                bot.post_muting_tweet(address, name)
 
 
 # Call the function
@@ -143,4 +143,4 @@ while True:
     process_new_entries(new_followings, new_blockings, new_muting, bot)
 
     # Sleep for 30 minutes
-    time.sleep(30 * 60)
+    time.sleep(1 * 60)
