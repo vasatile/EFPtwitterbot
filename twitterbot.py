@@ -37,9 +37,7 @@ class TwitterBot:
         tweet =  f"""
         
         
-    {address} started following {ens_name}
-
-        Track and Follow wallets @efp
+    {address} started following {ens_name} @efp
         
         https://ethfollow.xyz/{address}
         """
@@ -50,11 +48,7 @@ class TwitterBot:
         tweet = f"""
          
         
-    {address} just blocked {ens_name}
-        
-        
-        
-         @efp
+    {address} just blocked {ens_name} @efp
         
         https://ethfollow.xyz/{address}"""
         self.post_tweet(tweet)
@@ -63,12 +57,8 @@ class TwitterBot:
         """Post a tweet about a new mute."""
         tweet = f"""
        
-        
-    {address} just muted {ens_name}
-        
+    {address} just muted {ens_name} @efp
         
         
-         @efp
-        
-        https://ethfollow.xyz/{address}"""
+     https://ethfollow.xyz/{address}"""
         self.post_tweet(tweet)
