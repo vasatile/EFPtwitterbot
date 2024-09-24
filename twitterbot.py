@@ -52,9 +52,9 @@ class TwitterBot:
         
     {address} just blocked {ens_name}
         
-        Bad wallet maybe 🤐
         
-        Track and Follow wallets @efp
+        
+         @efp
         
         https://ethfollow.xyz/{address}"""
         self.post_tweet(tweet)
@@ -66,9 +66,9 @@ class TwitterBot:
         
     {address} just muted {ens_name}
         
-        🤐Looks like {ens_name} is Good at buying the Top
         
-        Track and Follow wallets @efp
+        
+         @efp
         
         https://ethfollow.xyz/{address}"""
         self.post_tweet(tweet)
