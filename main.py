@@ -39,36 +39,57 @@ def process_followings(address):
     efp_user = FollowAndTags(address)
     efp_user_link = efp_user.get_following_url()
     get_addy = Follows(efp_user_link)
+    
+    attempt = 0
+    while attempt < 3:  # Try up to 3 times
+        try:
+            addresses = get_addy.extract_addresses()
+            if addresses:
+                new_addresses = addresses[0]  # Get the last element
+                new_followings.append({address: new_addresses})
+                logging.info(f"New followings found for {address}: {new_addresses}")
+            else:
+                logging.info(f"No new followings found for {address}")
+            break  # Exit loop if successful
+        except Exception as e:
+            attempt += 1
+            logging.error(f"Error occurred while processing followings for {address}: {e}")
+            if attempt < 3:
+                logging.info(f"Retrying... attempt {attempt}")
+                time.sleep(2)  # Wait before retrying
+            else:
+                logging.error(f"Failed to process followings for {address} after 3 attempts")
 
-    try:
-        addresses = get_addy.extract_addresses()
-        if addresses:
-            new_addresses = addresses[0]  # Get the last element
-            new_followings.append({address: new_addresses})
-            logging.info(f"New followings found for {address}: {new_addresses}")
-        else:
-            logging.info(f"No new followings found for {address}")
-    except (requests.HTTPError, IndexError) as e:
-        logging.error(f"Error occurred while processing followings for {address}: {e}")
+
+
 
 def process_blockings(address):
     efp_user = FollowAndTags(address)
     efp_block_tag = efp_user.get_tags_url()
     get_block_tag = Follows(efp_block_tag)
 
-    AllTags = get_block_tag.extract_tags()
+    attempt = 0
+    while attempt < 3:  # Try up to 3 times
+        try:
+            AllTags = get_block_tag.extract_tags()
+            BlockedUsers = Blocks(AllTags)
+            listofBlockusers = BlockedUsers.extract_block_users()
+            if listofBlockusers:
+                new_blocked_addresses = listofBlockusers[0]
+                new_blockings.append({address: new_blocked_addresses})
+                logging.info(f"New blockings found for {address}: {new_blocked_addresses}")
+            else:
+                logging.info(f"No new blockings found for {address}")
+            break  # Exit loop if successful
 
-    try:
-        BlockedUsers = Blocks(AllTags)
-        listofBlockusers = BlockedUsers.extract_block_users()
-        if listofBlockusers:
-            new_blocked_addresses = listofBlockusers[0]  # Get the last element
-            new_blockings.append({address: new_blocked_addresses})
-            logging.info(f"New blockings found for {address}: {new_blocked_addresses}")
-        else:
-            logging.info(f"No new blockings found for {address}")
-    except (requests.HTTPError, IndexError) as e:
-        logging.error(f"Error occurred while processing blockings for {address}: {e}")
+        except Exception as e:
+            attempt += 1
+            logging.error(f"Error occurred while processing blockings for {address}: {e} (Attempt {attempt}/3)")
+            if attempt < 3:
+                time.sleep(2)  # Wait before retrying
+            else:
+                logging.error(f"Failed to process blockings for {address} after 3 attempts")
+                
 
 def process_mutings(address):
     efp_user = FollowAndTags(address)
@@ -76,18 +97,29 @@ def process_mutings(address):
     get_block_tag = Follows(efp_block_tag)
 
     AllTags = get_block_tag.extract_tags()
+    
+    attempt = 0
+    while attempt < 3:  # Try up to 3 times
 
-    try:
-        MutedUsers = Mutes(AllTags)
-        listofMutedusers = MutedUsers.extract_mute_users()
-        if listofMutedusers:
-            new_muted_addresses = listofMutedusers[0]  # Get the last element
-            new_muting.append({address: new_muted_addresses})
-            logging.info(f"New mutings found for {address}: {new_muted_addresses}")
-        else:
-            logging.info(f"No new mutings found for {address}")
-    except (requests.HTTPError, IndexError) as e:
-        logging.error(f"Error occurred while processing mutings for {address}: {e}")
+        try:
+            MutedUsers = Mutes(AllTags)
+            listofMutedusers = MutedUsers.extract_mute_users()
+            if listofMutedusers:
+                new_muted_addresses = listofMutedusers[0]  # Get the last element
+                new_muting.append({address: new_muted_addresses})
+                logging.info(f"New mutings found for {address}: {new_muted_addresses}")
+            else:
+                logging.info(f"No new mutings found for {address}")
+            break
+        except Exception as e:
+            attempt += 1
+            logging.error(f"Error occurred while processing mutings for {address}: {e}")
+            if attempt < 3:
+                time.sleep(2)  # Wait before retrying
+            else:
+                logging.error(f"Failed to process mutings for {address} after 3 attempts")
+                
+        
 
 def process_new_entries(new_followings, new_blockings, new_muting, bot):
     # Process new followings
@@ -99,7 +131,7 @@ def process_new_entries(new_followings, new_blockings, new_muting, bot):
                     get_ensurl = ensurl.get_ens_data_url()
                     fetchens = FetchEns(get_ensurl)
                     name = fetchens.extract_ens()
-                    if name == "":
+                    if name == "" or name is None:
                         logging.warning(f"No ENS name found for address {address}")
                         continue
                     
@@ -114,7 +146,7 @@ def process_new_entries(new_followings, new_blockings, new_muting, bot):
                     get_ensurl = ensurl.get_ens_data_url()
                     fetchens = FetchEns(get_ensurl)
                     name = fetchens.extract_ens()
-                    if name == "":
+                    if name == "" or name is None:
                         logging.warning(f"No ENS name found for blocking address {address}")
                         continue
                     
@@ -146,4 +178,4 @@ while True:
     process_new_entries(new_followings, new_blockings, new_muting, bot)
 
     # Sleep for 30 minutes
-    time.sleep(30 * 60)
+    time.sleep(50 * 60)
