@@ -9,7 +9,7 @@ class FetchEns:
     def fetch_ens_data(self):
         try:
             # Fetch data from the passed URL with a timeout
-            ens_response = requests.get(self.fullurl, timeout=10)  # 10 seconds timeout
+            ens_response = requests.get(self.fullurl, timeout=60)  # 60 seconds timeout
             # Raise an error for bad responses
             ens_response.raise_for_status()
             # Parse JSON response
