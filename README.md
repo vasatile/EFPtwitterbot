@@ -1,6 +1,4 @@
-Here’s a basic `README.md` file template for your project:
 
----
 
 # My Twitter Automation Project
 
