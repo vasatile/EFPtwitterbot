@@ -27,6 +27,7 @@ class TwitterBot:
 
         if response.status_code == 201:
             logging.info("Tweet posted successfully!")
+            time.sleep(10*60) #wait 10mins after each tweet
         elif response.status_code == 429:  # Too Many Requests
             logging.warning("Rate limit exceeded. Waiting for 4 hours...")
             time.sleep(4 * 60 * 60)  # Wait for 4 hours
