@@ -1,18 +1,14 @@
-Here’s a basic `README.md` file template for your project:
-
 ---
 
 # My Twitter Automation Project
 
-This project automates interactions with Twitter, such as fetching ENS followings, managing follows, mutes, blocks, and posting updates via a Twitter bot. It uses the Twitter API and OAuth for authentication, along with custom modules for different functionalities.
+This project automates interactions with ETH FOLLOW PROTOCOL, such as fetching ENS followings, followers, mutes, blocks, and posting updates via  Twitter. It uses the Twitter and EFP(ETH FOLLOW PROTOCOL) API and OAuth for authentication, along with custom modules for different functionalities.
 
 ## Features
 
-- **Fetch ENS Followings**: Retrieve and track ENS followings using the Twitter API.
-- **Manage Follows**: Automatically follow users based on certain conditions.
-- **Mute and Block Users**: Manage your mute and block lists via Twitter API.
+- **Fetch ENS Followings**: Retrieve and track ENS followings using the EFP API.
+- **Mute and Block Users**: Retrieve mute and block lists post via Twitter.
 - **Twitter Bot**: Post updates, tweet about ENS followings, and automate various tasks on Twitter.
-- **Data Logging**: Save interaction data into CSV files for record-keeping.
 
 ## Requirements
 
@@ -56,9 +52,6 @@ Here are the main libraries required for the project:
 - **Follows**: Handles functionality related to following users.
 - **EnsUrl**: Fetches the relevant ENS data.
 - **FetchEns**: Logic for retrieving ENS followings.
-- **Blocks**: Manages the block list on Twitter.
-- **Mutes**: Manages the mute list on Twitter.
-- **CSVWriter**: Writes output data to CSV files.
 - **TwitterBot**: Automates posting updates and interacting with users.
 
 ## How to Use
