@@ -10,6 +10,7 @@ from twitterbot import TwitterBot
 import time
 import json
 import logging
+import sys
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -19,6 +20,7 @@ API_KEY = os.getenv('TWITTER_API_KEY')
 API_SECRET_KEY = os.getenv('TWITTER_API_SECRET_KEY')
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET')
+BEARER_TOKEN = os.getenv('BEARER_TOKEN')
 
 # Create an instance of TwitterBot
 bot = TwitterBot(API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -125,17 +127,34 @@ def process_new_entries(new_followings, new_blockings, new_muting, bot):
     # Process new followings
     if new_followings:
         for new_entry in new_followings:
+            
+            
             for address, addresses in new_entry.items():
+                Key = list(new_entry.keys())[0]
                 if addresses:
                     ensurl = EnsUrl(addresses)
                     get_ensurl = ensurl.get_ens_data_url()
+                    
                     fetchens = FetchEns(get_ensurl)
+                    
                     name = fetchens.extract_ens()
+                    name_x = fetchens.extract_xtag()
+                    
                     if name == "" or name is None:
                         logging.warning(f"No ENS name found for address {address}")
                         continue
                     
-                    bot.post_following_tweet(address, name)
+                    ensurl_xtag = EnsUrl(address)
+                    get_ensurl_xtag = ensurl_xtag.get_ens_data_url()
+                    fetchens_xtag = FetchEns(get_ensurl_xtag)
+                    get_twitter_tag = fetchens_xtag.extract_xtag()
+                    
+                    if get_twitter_tag == "" or get_twitter_tag is None:
+                        logging.warning(f"no x handle for {address}")
+                        continue
+                
+                
+                    bot.post_following_tweet(address, name, get_twitter_tag, name_x)
 
     # Process new blockings
     if new_blockings:

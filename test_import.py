@@ -11,19 +11,9 @@ ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET')
 # Create an instance of TwitterBot
 bot = TwitterBot(API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
-try:
-    address = "jamesuche.eth"
-    ens_name = "neweth.eth"
-    bot.post_following_tweet(address, ens_name)
-except requests.exceptions.RequestException as e:
-    if e.response.status_code == 403:
-        error_data = e.response.json()
-        if error_data['errors'][0]['code'] == 187:
-            print("Error: Duplicate tweet detected.")
-        else:
-            print(f"Error: {error_data['errors'][0]['message']}")
-    else:
-        print(f"Error: {e}")
+user_id = bot.get_user_id()
+print(f"My user ID is: {user_id}")
+
 
 
 

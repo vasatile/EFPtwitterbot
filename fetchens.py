@@ -34,3 +34,13 @@ class FetchEns:
             name = ens_data.get("ens", {}).get("name", "")
             return name
         return ""
+
+    def extract_xtag(self):
+    # Fetch ENS data
+        xtag_data = self.fetch_ens_data()
+
+        if xtag_data:
+                # Fetch the Twitter handle from the nested 'records' dictionary
+                xtag_name = xtag_data.get("ens", {}).get("records", {}).get("com.twitter", "")
+                return xtag_name
+        return ""
