@@ -7,12 +7,11 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class TwitterBot:
-    def __init__(self, api_key, api_secret_key, access_token, access_token_secret, bearer_token):
+    def __init__(self, api_key, api_secret_key, access_token, access_token_secret):
         self.api_key = api_key
         self.api_secret_key = api_secret_key
         self.access_token = access_token
         self.access_token_secret = access_token_secret
-        self.bearer_token = bearer_token
         self.oauth = self.create_oauth_session()
 
     def create_oauth_session(self):
