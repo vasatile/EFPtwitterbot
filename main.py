@@ -23,9 +23,8 @@ API_SECRET_KEY = os.getenv('TWITTER_API_SECRET_KEY')
 ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET')
 
-if not all([API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET]):
-    logging.error("One or more Twitter API credentials are missing.")
-    exit(1)
+# Create an instance of TwitterBot
+bot = TwitterBot(API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
 # Load the ENS names from the JSON file with utf-8 encoding
 try:
