@@ -14,7 +14,6 @@ import time
 import json
 import logging
 
-
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -27,9 +26,6 @@ ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET')
 if not all([API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET]):
     logging.error("One or more Twitter API credentials are missing.")
     exit(1)
-
-# Create an instance of TwitterBot
-bot = TwitterBot(API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
 # Load the ENS names from the JSON file with utf-8 encoding
 try:
@@ -45,28 +41,9 @@ except json.JSONDecodeError as e:
     logging.error(f"Error decoding JSON: {e}")
     exit(1)
 
-# Parse Heroku DATABASE_URL (or use local PostgreSQL)
-DATABASE_URL = os.getenv('DATABASE_URL')
-
-if DATABASE_URL:
-    # Parse the Heroku PostgreSQL URL
-    url = urlparse(DATABASE_URL)
-    db_host = url.hostname
-    db_user = url.username
-    db_password = url.password
-    db_name = url.path[1:]  # Remove the leading "/"
-else:
-    logging.error("DATABASE_URL environment variable is not set.")
-    exit(1)
-
 # Initialize PostgresWriter with the Heroku DB credentials
 try:
-    db_writer = PostgresWriter(
-        host=db_host,
-        user=db_user,
-        password=db_password,
-        database=db_name
-    )
+    db_writer = PostgresWriter()  # No need to pass parameters; it will parse DATABASE_URL
     logging.info("Connected to PostgreSQL database successfully.")
 except Exception as e:
     logging.error(f"Failed to connect to PostgreSQL: {e}")
@@ -81,8 +58,6 @@ try:
 except Exception as e:
     logging.error(f"Error reading existing data: {e}")
     exit(1)
-
-# Add more logic here if necessary...
 
 
 # Lists to hold new entries as sets to avoid duplicates

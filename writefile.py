@@ -3,23 +3,21 @@ import psycopg2
 from urllib.parse import urlparse
 
 class PostgresWriter:
-    def __init__(self):
-        # Get the DATABASE_URL from environment variables
-        db_url = os.getenv('DATABASE_URL')
-        
-        if not db_url:
-            print("DATABASE_URL environment variable is not set.")
-            return
-        
-        # Parse the DATABASE_URL
-        url = urlparse(db_url)
-        
-        # Extract the database connection info
-        host = url.hostname
-        user = url.username
-        password = url.password
-        database = url.path[1:]  # Remove the leading '/' from the path
-        port = url.port
+    def __init__(self, host=None, user=None, password=None, database=None):
+        if host is None or user is None or password is None or database is None:
+            # Get the DATABASE_URL from environment variables if not provided directly
+            db_url = os.getenv('DATABASE_URL')
+            if not db_url:
+                print("DATABASE_URL environment variable is not set.")
+                return
+            
+            # Parse the DATABASE_URL
+            url = urlparse(db_url)
+            host = url.hostname
+            user = url.username
+            password = url.password
+            database = url.path[1:]  # Remove the leading '/' from the path
+            port = url.port
 
         # Establish the database connection
         try:
@@ -27,8 +25,7 @@ class PostgresWriter:
                 host=host,
                 user=user,
                 password=password,
-                dbname=database,
-                port=port
+                dbname=database
             )
             self.cursor = self.conn.cursor()
             print("Connected to PostgreSQL database successfully.")
