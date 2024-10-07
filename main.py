@@ -191,7 +191,7 @@ def process_new_entries(new_followings, new_blockings, new_muting, bot):
                 logging.warning(f"no x handle for {address}")
                 continue
             
-            # bot.post_following_tweet(address, name, get_twitter_tag, name_x)
+            bot.post_following_tweet(address, name, get_twitter_tag, name_x)
 
     # Process new blockings
     for address, new_address in new_blockings:
@@ -204,7 +204,16 @@ def process_new_entries(new_followings, new_blockings, new_muting, bot):
                 logging.warning(f"No ENS name found for blocking address {address}")
                 continue
             
-            # bot.post_blocking_tweet(address, name)
+            ensurl_xtag = EnsUrl(address)
+            get_ensurl_xtag = ensurl_xtag.get_ens_data_url()
+            fetchens_xtag = FetchEns(get_ensurl_xtag)
+            get_twitter_tag = fetchens_xtag.extract_xtag()
+            
+            if get_twitter_tag == "" or get_twitter_tag is None:
+                logging.warning(f"no x handle for {address}")
+                continue
+            
+            bot.post_blocking_tweet(address, name, get_twitter_tag, name_x)
 
     # Process new mutings
     for address, new_address in new_muting:  
@@ -217,7 +226,15 @@ def process_new_entries(new_followings, new_blockings, new_muting, bot):
                 logging.warning(f"No ENS name found for muting address {address}")
                 continue
             
-            # bot.post_muting_tweet(address, name)
+            ensurl_xtag = EnsUrl(address)
+            get_ensurl_xtag = ensurl_xtag.get_ens_data_url()
+            fetchens_xtag = FetchEns(get_ensurl_xtag)
+            get_twitter_tag = fetchens_xtag.extract_xtag()
+            
+            if get_twitter_tag == "" or get_twitter_tag is None:
+                logging.warning(f"no x handle for {address}")
+                continue
+            bot.post_muting_tweet(address, name,get_twitter_tag, name_x)
 
 def update_data(new_followings, new_blockings, new_muting):
     if new_followings:
